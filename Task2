@@ -15,17 +15,28 @@ namespace Test2
                 "Winter is coming",
                 "Зиииммаа близккооо",
                 "1111222333",
-                "//.ъ/.ъ>"
+                "//.ъ/>"
             };
-            string resultString = String.Join("", strings);
-            char[] elements = resultString.ToCharArray();
-            char[] originalElements = Distinct(elements);
+            char[] originalElements = CreateOriginalElements(strings);
             Console.WriteLine("Неповторяющиейся элементы:");
             foreach (var example in originalElements)
             {
                 Console.Write(example);
             }
             Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Создание массива неповторяющихся символов
+        /// </summary>
+        /// <param name="strings">Лист строк</param>
+        /// <returns>Массив символов</returns>
+        private static char[] CreateOriginalElements(List<string> strings)
+        {
+            string resultString = String.Join("", strings);
+            char[] _elements = resultString.ToCharArray();
+            char[] originalElements = Distinct(_elements);
+            return originalElements;
         }
 
         /// <summary>
