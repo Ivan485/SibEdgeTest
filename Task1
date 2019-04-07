@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+
+namespace SibEdgeTest
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            var files = new[] 
+            {
+                "aaa.txt",
+                "bbb.TXT",
+                "xyz.abc.pdf",
+                "aaaa.PDF",
+                "abc.xml",
+                "ccc.txt",
+                "zzz.txt"
+            };
+            string[] types = OnlyTypes(files);
+            foreach (var oneType in Distinct(types))
+            {
+                Console.WriteLine($"Расширение: {oneType} - встречается" +
+                    $" {DigitCount(types, oneType)} раз(а)");
+            }
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Создание массива строк только типов файлов
+        /// </summary>
+        /// <param name="files">массив строк полных имен файлов</param>
+        /// <returns>массив строк типов файлов</returns>
+        private static string[] OnlyTypes(string[] files)
+        {
+            string[] types = new string [0];
+            string _filter = @"\.[a-z]*$";            
+            for (var i = 0; i < files.Length; i++)
+            {               
+                if (Regex.IsMatch(files[i], _filter, RegexOptions.IgnoreCase)
+                    == true)
+                {
+                    Regex newReg = new Regex(_filter, RegexOptions.IgnoreCase);
+                    Match match = newReg.Match(files[i]);
+                    Array.Resize(ref types, types.Length+1);
+                    types[i] = (Convert.ToString(match)).ToLower();
+                }
+            }
+            return types;
+        }
+
+        /// <summary>
+        /// Создание массива с уникальными типами 
+        /// </summary>
+        /// <param name="types">Массив строк только типов файлов</param>
+        /// <returns>Массив строк с уникальными расширениями</returns>
+        private static string[] Distinct(string[] types)
+        {
+            HashSet<string> list = new HashSet<string>(types);
+            string[] newTypes = new string[list.Count];
+            list.CopyTo(newTypes);
+            return newTypes;
+        }
+
+        /// <summary>
+        /// Поиск количества повторов для одного типа
+        /// </summary>
+        /// <param name="types">Массив строк только типов файлов</param>
+        /// <param name="oneType">Строка типа файла</param>
+        /// <returns>Количество повторений в массиве строк</returns>
+        private static int DigitCount(string[] types, string oneType)
+        {
+            int repeats = 0;
+            foreach (var _example in types)
+            {
+                if (_example == oneType)
+                {
+                    repeats++;
+                }
+            }
+            return repeats;
+        }
+    }
+}
